@@ -15,16 +15,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Event; // importa o model Event
+use App\Models\User;
 
 class EventController extends Controller
 {
 
     public function index()
     {
-        // Retrieve all events from the database
-        $events = Event::all();
+        $search =  request('search');
+        if ($search) {
+            // Retrieve events from the database
+            $events = Event::where([
+                ['title', 'like', '%' . $search . '%'],
+            ])->get();
+        } else {
+            $events = Event::all();
+        }
 
-        return view('welcome', ['events' => $events]);
+        return view('welcome', ['events' => $events, 'search' => $search]);
     }
 
     public function create()
@@ -59,6 +67,9 @@ class EventController extends Controller
             $event->image = $imageName;
         }
 
+        $user = auth()->user();
+        $event->user_id = $user->id;
+
         $event->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!'); //with define uma flash message da session para exibir
@@ -66,9 +77,19 @@ class EventController extends Controller
 
     public function show($id)
     {
-
         $event = Event::findOrFail($id);
 
-        return view('events.show', ['event' => $event]);
+        // acesso ao dono do evento criado
+        $eventOwner = User::where('id', $event->user_id)->first()->toArray();
+
+        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]);
+    }
+
+    public function dashboard()
+    {
+        $user = auth()->user();
+        $events = $user->events;
+
+        return view('events.dashboard', ['events' => $events]);
     }
 }

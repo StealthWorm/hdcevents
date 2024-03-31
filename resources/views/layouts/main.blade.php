@@ -32,12 +32,29 @@
                     <li class="nav-item">
                         <a href="/events/create" class="nav-link">Criar Eventos</a>
                     </li>
+                    <!-- identificador de guest no sistema, patra autenticações -->
+                    @auth
                     <li class="nav-item">
-                        <a href="/" class="nav-link">Entrar</a>
+                        <a href="/dashboard" class="nav-link">Meus eventos</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/" class="nav-link">Cadastrar</a>
+                        <!-- POST É A FORMA DE IDENTIFICAR O LOGOUT -->
+                        <form action="logout" method="POST">
+                            @csrf
+                            <a href="/logout" class="nav-link" onclick="event.preventDefault(); this.closest('form').submit();">
+                                Sair
+                            </a>
+                        </form>
                     </li>
+                    @endauth
+                    @guest
+                    <li class="nav-item">
+                        <a href="/login" class="nav-link">Entrar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/register" class="nav-link">Cadastrar</a>
+                    </li>
+                    @endguest
                 </ul>
             </div>
         </nav>
@@ -60,5 +77,6 @@
 
     <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 </body>
+
 
 </html>

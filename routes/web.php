@@ -37,13 +37,16 @@ use App\Http\Controllers\EventController;
 
 // o "index" é a function declarada dentro do Controller
 Route::get('/', [EventController::class, 'index']);
-Route::get('/events/create', [EventController::class, 'create']);
+// Route::post('/', "App/Http/Controllers/EventController@create")->name("something.create");
+Route::get('/events/create', [EventController::class, 'create'])->middleware('auth'); // configura um middleware para validar o processo de criação, redirecionando automaticamente
 Route::get('/events/{id}', [EventController::class, 'show']);
 Route::post('/events', [EventController::class, 'store']);
 
 Route::get('/contact', function () {
     return view('contact');
 });
+
+Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
 
 // Route::get('/produtos', function () {
 //     $busca = request('search');  //Pega o valor da busca da request como query param
@@ -74,3 +77,5 @@ Route::get('/contact', function () {
 // ELOQUENT (ORM do Laravel)
 
 // no laravel é comum ter uma action especifica para POST chamda "store"
+
+// Autenticação com Laravel utilizamos Jetstream (instalação via composer) com Liveware(componentes de autenticação par o Blade) com instalação via artisan
