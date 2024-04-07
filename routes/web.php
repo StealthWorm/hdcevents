@@ -52,6 +52,7 @@ Route::get('/contact', function () {
 
 Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
+Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->middleware('auth');
 
 // Route::get('/produtos', function () {
 //     $busca = request('search');  //Pega o valor da busca da request como query param
@@ -80,7 +81,10 @@ Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middlew
 // php artisan make:migration add_image_to_events_table -> adiciona o campo de forma incremental, sem resetar os dados
 
 // ELOQUENT (ORM do Laravel)
-
 // no laravel é comum ter uma action especifica para POST chamda "store"
 
-// Autenticação com Laravel utilizamos Jetstream (instalação via composer) com Liveware(componentes de autenticação par o Blade) com instalação via artisan
+// Autenticação com Laravel utilizamos:
+// Jetstream (instalação via composer) -> "composer require laravel/jetstream"
+// Livewire(componentes de autenticação par o Blade) com instalação via artisan -> "php artisan jetstream:install livewire"
+
+// após instalar esse dois pacotes ele vai pedir para rodar "npm install" e "npm run dev", o que vai gerar rotas de login pré-configuradas no web.php, além de arquivos do livewire para autenticação com seus respectivos links para acesso
